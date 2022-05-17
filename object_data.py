@@ -7,8 +7,8 @@ wwise_core = "ak.wwise.core"
 
 
 args = {
-    "from": {"path": ['\\Actor-Mixer Hierarchy\\Default Work Unit']},
-    #"from" :  {"ofType" : ["Sound"]}
+    #"from": {"path": ['\\Actor-Mixer Hierarchy\\Default Work Unit']},
+    "from" :  {"ofType" : ["Sound"]}
 }
 
 options = {
