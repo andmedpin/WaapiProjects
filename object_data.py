@@ -22,7 +22,7 @@ def get_object_data():
     }
 
     options = {
-        "return": ['id', 'filePath', 'workunit', 'name', 'type', 'notes']
+        "return": ['id', 'filePath', 'parent', 'name', 'type', 'notes']
     }
 
     object_data = client.call("ak.wwise.core.object.get", args, options=options)
@@ -33,11 +33,11 @@ def get_object_data():
 if __name__ == '__main__':
     data_list = get_object_data().get('return')[0]
 
-    print(f'Selected object ID: {data_list.get("id")}')
-    print(f'Selected object Name: {data_list.get("name")}')
-    print(f'Selected object Type: {data_list.get("type")}')
-    print(f'Selected object Work Unit: {data_list.get("workunit")}')
-    print(f'Selected object Notes: {data_list.get("notes")}')
+    print(f'Object\'s ID: {data_list.get("id")}')
+    print(f'Object\'s Name: {data_list.get("name")}')
+    print(f'Object\'s Type: {data_list.get("type")}')
+    print(f'Object\'s Parent: {data_list.get("parent")}')
+    print(f'Object\'s Notes: {data_list.get("notes")}')
 
 
 client.disconnect()
