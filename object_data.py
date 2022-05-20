@@ -14,7 +14,7 @@ def get_selected_object_id():
     return selected_object_id
 
 
-def get_object_data():
+def get_object_data(data):
     args = {
         # "from": {"path": ['\\Actor-Mixer Hierarchy\\Default Work Unit']},
         # "from":  {"ofType": ["Sound"]},
@@ -27,17 +27,29 @@ def get_object_data():
 
     object_data = client.call("ak.wwise.core.object.get", args, options=options)
 
-    return object_data
+    match data:
+        case "id":
+            return object_data.get('return')[0].get('id')
+
+        case "name":
+            return object_data.get('return')[0].get('name')
+
+        case "type":
+            return object_data.get('return')[0].get('type')
+
+        case "parent":
+            return object_data.get('return')[0].get('parent')
+
+        case "notes":
+            return object_data.get('return')[0].get('notes')
+
+        case "all":
+            return object_data.get('return')[0]
 
 
 if __name__ == '__main__':
-    data_list = get_object_data().get('return')[0]
 
-    print(f'Object\'s ID: {data_list.get("id")}')
-    print(f'Object\'s Name: {data_list.get("name")}')
-    print(f'Object\'s Type: {data_list.get("type")}')
-    print(f'Object\'s Parent: {data_list.get("parent")}')
-    print(f'Object\'s Notes: {data_list.get("notes")}')
-
+    requested_data = "name"
+    pprint(f"Object's {requested_data}: {get_object_data(requested_data)}")
 
 client.disconnect()
