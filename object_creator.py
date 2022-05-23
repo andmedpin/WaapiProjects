@@ -1,10 +1,12 @@
 from waapi import WaapiClient
 from pprint import pprint
+from object_data import ObjectData
+
 
 new_object_id = ''
 
 client = WaapiClient()
-
+wdata = ObjectData()
 
 def create_object():
     global new_object_id
@@ -35,7 +37,6 @@ def get_object_id():
     }
 
     object_info = client.call('ak.wwise.core.object.get', args, options=options)
-    pprint(object_info)
 
 
 def debug():
@@ -44,8 +45,8 @@ def debug():
 
 
 if __name__ == '__main__':
-    create_object()
-    get_object_id()
-
+    #create_object()
+    #get_object_id()
+    print(wdata.debug('amp'))
 
 client.disconnect()
