@@ -2,7 +2,6 @@ from waapi import WaapiClient
 from pprint import pprint
 import object_data
 
-# Variables
 # wwise_data = object_data.WwiseObjectData()
 
 
@@ -21,7 +20,6 @@ class WwiseObject:
         return requested_info
 
     def create_object(self):
-
         args = {
             "parent": "\\Actor-Mixer Hierarchy\\Default Work Unit",
             "type": "Sound",
@@ -36,7 +34,7 @@ class WwiseObject:
 if __name__ == '__main__':
     amp = WwiseObject('my_new_sound')
     amp.create_object()
-    pprint(amp.get_info('type'))
+    pprint(amp.get_info('all'))
     pprint(object_data.get_selected_object_id())
 
 
