@@ -1,19 +1,17 @@
 from waapi import WaapiClient
 from pprint import pprint
 
-# Variables
-client = WaapiClient()
 
-
-class ObjectData:
+class WwiseObjectData:
     def __init__(self):
-        pass
+        self.client = WaapiClient()
 
     def get_selected_object_id(self):
         # Get user's selected object data in Wwise
-        selected_object = client.call('ak.wwise.ui.getSelectedObjects')
+        selected_object = self.client.call('ak.wwise.ui.getSelectedObjects')
 
         selected_object_id = str(selected_object.get('objects')[0].get('id'))
+        self.client.disconnect()
         return selected_object_id
 
     def get_object_data(self, data, object_id):
@@ -25,7 +23,7 @@ class ObjectData:
             "return": ['id', 'filePath', 'parent', 'name', 'type', 'notes']
         }
 
-        object_data = client.call("ak.wwise.core.object.get", args, options=options)
+        object_data = self.client.call("ak.wwise.core.object.get", args, options=options)
 
         match data:
             case "id":
@@ -48,31 +46,10 @@ class ObjectData:
 
             case "all":
                 return object_data.get('return')[0]
+        self.client.disconnect()
 
-    def debug(self):
-        pprint(self)
-
-
-class WwiseObject:
-
-    def __init__(self, name):
-        self.name = name
-        self.new_object_id = ""
-        self.info = ObjectData()
-
-    def get_info(self, data):
-        return self.info.get_object_data(data, self.new_object_id)
-
-    def create_object(self):
-
-        args = {
-            "parent": "\\Actor-Mixer Hierarchy\\Default Work Unit",
-            "type": "Sound",
-            "name": self.name
-        }
-
-        new_object = client.call("ak.wwise.core.object.create", args)
-        self.new_object_id = str(new_object.get('id'))
+    def debug(self, data):
+        pprint(data)
 
 
 if __name__ == '__main__':
@@ -81,4 +58,4 @@ if __name__ == '__main__':
     #pprint(amp_sound.get_info('all'))
     pass
 
-client.disconnect()
+
