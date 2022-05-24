@@ -2,17 +2,23 @@ from waapi import WaapiClient
 from pprint import pprint
 
 
+# Utilities #
+
+def get_selected_object_id():
+    client = WaapiClient()
+    # Get user's selected object data in Wwise
+    selected_object = client.call('ak.wwise.ui.getSelectedObjects')
+
+    selected_object_id = str(selected_object.get('objects')[0].get('id'))
+    client.disconnect()
+    return selected_object_id
+
+
+# Classes   #
+
 class WwiseObjectData:
     def __init__(self):
         self.client = WaapiClient()
-
-    def get_selected_object_id(self):
-        # Get user's selected object data in Wwise
-        selected_object = self.client.call('ak.wwise.ui.getSelectedObjects')
-
-        selected_object_id = str(selected_object.get('objects')[0].get('id'))
-        self.client.disconnect()
-        return selected_object_id
 
     def get_object_data(self, data, object_id):
         args = {
@@ -50,12 +56,8 @@ class WwiseObjectData:
 
     def debug(self, data):
         pprint(data)
+        self.client.disconnect()
 
 
 if __name__ == '__main__':
-    #amp_sound = WwiseObject("amp")
-    #amp_sound.create_object()
-    #pprint(amp_sound.get_info('all'))
     pass
-
-
