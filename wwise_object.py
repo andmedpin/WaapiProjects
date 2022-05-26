@@ -7,11 +7,13 @@ import object_data
 
 class WwiseObject:
 
-    def __init__(self, name):
-        self.client = WaapiClient()
+    def __init__(self, name, object_type):
         # self.data = object_data.WwiseObjectData()
         self.name = name
+        self.object_type = object_type
+        self.parent = object_data.get_selected_object_id()
         self.new_object_id = ""
+        self.client = WaapiClient()
 
     def get_info(self, data):
         requested_info = object_data.WwiseObjectData().get_object_data(data, self.new_object_id)
@@ -21,8 +23,9 @@ class WwiseObject:
 
     def create_object(self):
         args = {
-            "parent": "\\Actor-Mixer Hierarchy\\Default Work Unit",
-            "type": "Sound",
+            # "parent": "\\Actor-Mixer Hierarchy\\Default Work Unit",
+            "parent": self.parent,
+            "type": self.object_type,
             "name": self.name
         }
 
@@ -30,12 +33,11 @@ class WwiseObject:
         self.new_object_id = str(new_object.get('id'))
         self.client.disconnect()
 
-
 if __name__ == '__main__':
-    amp = WwiseObject('my_new_sound')
-    amp.create_object()
-    pprint(amp.get_info('all'))
-    pprint(object_data.get_selected_object_id())
-
+    #amp = WwiseObject('Wwise Tone Generator', 'SourcePlugin')
+    #amp.create_object()
+    #pprint(amp.get_info('all'))
+    #pprint(object_data.get_selected_object_id())
+    pass
 
 
