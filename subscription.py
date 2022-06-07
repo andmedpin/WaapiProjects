@@ -6,6 +6,7 @@ client = WaapiClient()
 
 
 def on_name_changed(*args, **kwargs):
+
     obj_type = kwargs.get("object", {}).get("type")
 
     old_name = kwargs.get("oldName")
@@ -46,16 +47,17 @@ if __name__ == '__main__':
         on_name_changed, 
         {"return": ["type", 'parent']}
     )
-    '''
 
     handler_create = client.subscribe(
         "ak.wwise.core.object.created",
         on_object_created,
         {"return": ["id"]}
     )
+    '''
 
     handler_select = client.subscribe(
         "ak.wwise.ui.selectionChanged",
         on_object_selected,
         {"return": ["type", "id", "parent"]}
     )
+
