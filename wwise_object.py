@@ -7,11 +7,11 @@ import object_data
 
 class WwiseObject:
 
-    def __init__(self, name, object_type):
+    def __init__(self, name, object_type, parent):
         # self.data = object_data.WwiseObjectData()
         self.name = name
         self.object_type = object_type
-        self.parent = object_data.get_selected_object_id()
+        self.parent = parent
         self.new_object_id = ""
         self.client = WaapiClient()
 
@@ -38,6 +38,7 @@ if __name__ == '__main__':
     #amp.create_object()
     #pprint(amp.get_info('all'))
     #pprint(object_data.get_selected_object_id())
+
     pass
 
 
