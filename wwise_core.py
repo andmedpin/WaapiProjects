@@ -1,11 +1,7 @@
 from waapi import WaapiClient
 from pprint import pprint
-import object_data
-import wwise_object
-
-
-wdata = object_data
-wobject = wwise_object
+import object_data as wdata
+import wwise_object as wobject
 
 
 if __name__ == '__main__':
