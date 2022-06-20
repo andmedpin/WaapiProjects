@@ -8,7 +8,10 @@ if __name__ == '__main__':
 
     # Create a child Object of selected Work Unit
     parent_object_id = wdata.get_selected_object_id()
+    print(parent_object_id)
 
-    new_object = wobject.WwiseObject("amp_sound", "Sound", parent_object_id)
-    new_object.create_object()
-    print(f"New Object Created, ID is {new_object.new_object_id}, Name is {new_object.name}")
+    temp_obj = wobject.WwiseObject("Temp3", parent_object_id)
+    temp_id = temp_obj.create_object("WorkUnit")
+    print(temp_id)
+    temp_obj.generate_temp_structure("Loop")
+    temp_obj.generate_temp_structure("OneShot")

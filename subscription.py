@@ -35,7 +35,7 @@ def on_object_selected(*args, **kwargs):
     object_type = object_selected.get('type')
     object_parent = object_selected.get('parent')
 
-    # pprint(kwargs)
+    #pprint(kwargs)
 
     pprint(f'Object selected is of type: {object_type}, \n ID of the object: {object_id}, \n Parent: {object_parent}')
 
@@ -47,17 +47,19 @@ if __name__ == '__main__':
         on_name_changed, 
         {"return": ["type", 'parent']}
     )
-
+    '''
+    '''
     handler_create = client.subscribe(
         "ak.wwise.core.object.created",
         on_object_created,
         {"return": ["id"]}
     )
     '''
-
+    #'''
     handler_select = client.subscribe(
         "ak.wwise.ui.selectionChanged",
         on_object_selected,
         {"return": ["type", "id", "parent"]}
     )
+    #'''
 
