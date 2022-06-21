@@ -24,12 +24,9 @@ class WwiseObject:
 
     def create_object(self, object_type):
         args = {
-            # "parent": "\\Actor-Mixer Hierarchy\\Default Work Unit",
             "parent": self.parent,
             "type": object_type,
             "name": self.name,
-            # "@OverrideOutput": True,
-            # "@OutputBus": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Sounds"
         }
 
         new_object = self.client.call("ak.wwise.core.object.create", args)
@@ -38,19 +35,16 @@ class WwiseObject:
         self.client.disconnect()
         return self.object_id
 
-    def set_reference(self, reference, target_object):
+    def set_property(self, object, property, value):
         args = {
-            "object": self.object_id,
-            # "reference": reference,
-            # "value": target_object
-            # "object": reference,
-            # "object": f"\\Actor-Mixer Hierarchy\\Default Work Unit\\{self.name}",
-            "reference": f"@{reference}",
-            "value": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Sounds"
+            "object": object,
+
+            "property": property,
+
+            "value": value
         }
-        print(args["object"])
-        self.client.call("ak.wwise.core.object.setReference", args)
-        # self.new_object_id = str(new_object.get('id'))
+
+        self.client.call("ak.wwise.core.object.setProperty", args)
         self.client.disconnect()
 
     def generate_temp_structure(self, suffix):
@@ -67,36 +61,29 @@ class TempSource(WwiseObject):
         self.suffix = suffix
         self.temp_wu_id = temp_wu_id
         super(TempSource, self).__init__(name, parent)
-        print(f"{name} ClassCreated, suffix is: {suffix}, parent is: {self.temp_wu_id}")
+        print(f"{name}Source class created, suffix is: {suffix}, parent's ID is: {self.temp_wu_id}")
         self.create_temp_source(f"{name}_{suffix}", self.temp_wu_id)
 
     def create_temp_source(self, name, parent):
+
+        if self.suffix == "Loop":
+            isloop = True
+        else:
+            isloop = False
+
         args = {
             "parent": parent,
             "name": name,
             "type": "Sound",
-            # "@OverrideOutput": True,
-            # "@OutputBus": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Sounds"
+            "@IsLoopingEnabled": isloop
         }
 
         temp_source = self.client.call("ak.wwise.core.object.create", args)
         temp_source_id = temp_source["id"]
         self.client.disconnect()
 
-        if self.suffix == "Loop":
-            print("I have to set the sound to loop")
-            print(temp_source_id)
-            args = {
-                "object": temp_source_id,
-                "property": "Volume",
-                "value": -3
-            }
-            self.client.call("ak.wwise.core.object.setProperty", args)
-            self.client.disconnect()
+        return temp_source_id
 
-        self.client.call("ak.wwise.core.project.save")
-        print("saved")
-        self.client.disconnect()
         # actor mixer hierarchy
         # DONE create work unit under selected parent
         # DONE create one shot sound object
