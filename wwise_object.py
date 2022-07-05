@@ -1,10 +1,7 @@
-import time
-
 from waapi import WaapiClient
 from pprint import pprint
 import object_data
 
-# wwise_data = object_data.WwiseObjectData()
 
 
 class WwiseObject:
@@ -20,6 +17,7 @@ class WwiseObject:
         requested_info = object_data.WwiseObjectData().get_object_data(data, self.object_id)
         # requested_info = wwise_data.get_object_data(data, self.new_object_id)
         # requested_info = self.data.get_object_data(data, self.new_object_id)
+        self.client.disconnect()
         return requested_info
 
     def create_object(self, object_type):
@@ -47,39 +45,46 @@ class WwiseObject:
         self.client.call("ak.wwise.core.object.setProperty", args)
         self.client.disconnect()
 
-    def generate_temp_structure(self, suffix):
+    def generate_temp_structure(self, suffix, path):
         name = self.name
         parent = self.parent
         temp_wu_id = self.object_id
-        temp_source = TempSource(name, parent, suffix, temp_wu_id)
-        #temp_source.generate_temp_structure("MY_Suffix")
+        temp_source = TempSource(name, parent, suffix, temp_wu_id, path)
 
 
 class TempSource(WwiseObject):
 
-    def __init__(self, name, parent, suffix, temp_wu_id):
+    def __init__(self, name, parent, suffix, temp_wu_id, path):
         self.suffix = suffix
         self.temp_wu_id = temp_wu_id
+        self.path = path
         super(TempSource, self).__init__(name, parent)
-        print(f"{name}Source class created, suffix is: {suffix}, parent's ID is: {self.temp_wu_id}")
-        self.create_temp_source(f"{name}_{suffix}", self.temp_wu_id)
+        print(f"{name}Source class created, suffix is: {suffix}, parent's ID is: {self.temp_wu_id}, path is {path}")
+        # Run when Instantiating a new Temp Source Class
+        self.new_source = self.create_temp_source(f"{name}_{suffix}")
 
-    def create_temp_source(self, name, parent):
-
+    def create_temp_source(self, name):
         if self.suffix == "Loop":
             isloop = True
         else:
             isloop = False
 
         args = {
-            "parent": parent,
-            "name": name,
-            "type": "Sound",
-            "@IsLoopingEnabled": isloop
+            "importOperation": "createNew",
+            "default": {},
+            "imports": [
+                {
+                    "importLanguage": "SFX",
+                    "@Volume": "1",
+                    "@IsLoopingEnabled": isloop,
+                    "objectPath": f"{self.path}\\<Sound SFX>{name}",
+                    "audioFile": "C:\\Users\\andme\\music.wav",
+                }
+            ]
         }
 
-        temp_source = self.client.call("ak.wwise.core.object.create", args)
-        temp_source_id = temp_source["id"]
+        temp_source = self.client.call("ak.wwise.core.audio.import", args)
+        temp_source_id = temp_source["objects"][1]["id"]
         self.client.disconnect()
 
         return temp_source_id

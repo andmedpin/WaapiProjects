@@ -26,7 +26,7 @@ class WwiseObjectData:
         }
 
         options = {
-            "return": ['id', 'filePath', 'parent', 'name', 'type', 'notes']
+            "return": ['id', 'path', 'parent', 'name', 'type', 'notes']
         }
 
         object_data = self.client.call("ak.wwise.core.object.get", args, options=options)
@@ -48,7 +48,7 @@ class WwiseObjectData:
                 return object_data.get('return')[0].get('notes')
 
             case "path":
-                return object_data.get('return')[0].get('filePath')
+                return object_data.get('return')[0].get('path')
 
             case "all":
                 return object_data.get('return')[0]
