@@ -1,8 +1,27 @@
 from waapi import WaapiClient
 from pprint import pprint
 import object_data
+import tkinter as tk
+from tkinter import filedialog as fd
 
 
+# Utilities #
+
+def get_audio_file_path(file_identifier):
+    # Import Wave File
+    tk.Tk().withdraw()
+
+    filetypes = (
+        ('wave Files', '*.wav'),
+        ('All files', '*.*')
+    )
+
+    filename = fd.askopenfilename(title=f'Select the {file_identifier} file', initialdir='/', filetypes=filetypes)
+    filename = filename.replace("/", "\\")
+    return filename
+
+
+# Classes #
 
 class WwiseObject:
 
@@ -78,6 +97,7 @@ class TempSource(WwiseObject):
                     "@Volume": "1",
                     "@IsLoopingEnabled": isloop,
                     "objectPath": f"{self.path}\\<Sound SFX>{name}",
+                    # "audioFile": get_audio_file_path(name),
                     "audioFile": "C:\\Users\\andme\\music.wav",
                 }
             ]

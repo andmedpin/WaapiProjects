@@ -14,7 +14,7 @@ def get_selected_object_id():
     return selected_object_id
 
 
-# Classes   #
+# Classes #
 
 class WwiseObjectData:
     def __init__(self):

@@ -3,14 +3,10 @@ from pprint import pprint
 import object_data as wdata
 import wwise_object as wobject
 
-# file import
-#import easygui
-#file = easygui.fileopenbox()
-
 if __name__ == '__main__':
 
     # Variables
-    utility_name = "Utility"
+    utility_name = "Temp"
 
     # Create a child Object of selected Work Unit
     parent_object_id = wdata.get_selected_object_id()
@@ -27,5 +23,6 @@ if __name__ == '__main__':
 
     WaapiClient().call("ak.wwise.core.project.save")
     WaapiClient().disconnect()
+
 
 
