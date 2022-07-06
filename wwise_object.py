@@ -69,6 +69,7 @@ class WwiseObject:
         parent = self.parent
         temp_wu_id = self.object_id
         temp_source = TempSource(name, parent, suffix, temp_wu_id, path)
+        return temp_source.new_source
 
 
 class TempSource(WwiseObject):
@@ -80,7 +81,8 @@ class TempSource(WwiseObject):
         super(TempSource, self).__init__(name, parent)
         print(f"{name}Source class created, suffix is: {suffix}, parent's ID is: {self.temp_wu_id}, path is {path}")
         # Run when Instantiating a new Temp Source Class
-        self.new_source = self.create_temp_source(f"{name}_{suffix}")
+        self.new_source = self.create_temp_source(f"{self.name}_{self.suffix}")
+        #self.new_event = self.create_temp_event(self.name, self.suffix)
 
     def create_temp_source(self, name):
         if self.suffix == "Loop":
@@ -97,8 +99,8 @@ class TempSource(WwiseObject):
                     "@Volume": "1",
                     "@IsLoopingEnabled": isloop,
                     "objectPath": f"{self.path}\\<Sound SFX>{name}",
-                    # "audioFile": get_audio_file_path(name),
-                    "audioFile": "C:\\Users\\andme\\music.wav",
+                    "audioFile": get_audio_file_path(name),
+                    # "audioFile": "C:\\Users\\andme\\music.wav",
                 }
             ]
         }
@@ -109,17 +111,47 @@ class TempSource(WwiseObject):
 
         return temp_source_id
 
-        # actor mixer hierarchy
-        # DONE create work unit under selected parent
-        # DONE create one shot sound object
-        # DONE create lp sound object
-        # import audio for both objects
+    def create_temp_event(self, name, suffix):
 
-        # stretch goal, give the option to add attenuation
+        print(f"{name}_____name")
+        print(f"{suffix}_____suffix")
+        print(f"{self.new_source}_____source id")
 
-        # event tab
-        # add work unit under
-        # crete events
+        args = {
+            "parent": "\\Events",
+            "type": "WorkUnit",
+            "name": f"{name}",
+            "onNameConflict": "merge",
+            
+            "children": [
+                {
+                    "type": "Event",
+                    "name": f"{suffix}_Play",
+                    "children": [
+                        {
+                            "name": "",
+                            "type": "Action",
+                            "@ActionType": 1,
+                            "@Target": f"{self.new_source}"
+                        }
+                    ]
+                },
+                {
+                    "type": "Event",
+                    "name": f"{suffix}_Stop",
+                    "children": [
+                        {
+                            "name": "",
+                            "type": "Action",
+                            "@ActionType": 2,
+                            "@Target": f"{self.new_source}"
+                        }
+                    ]
+                }
+            ]
+        }
+        self.client.call("ak.wwise.core.object.create", args)
+        self.client.disconnect()
 
 
 if __name__ == '__main__':

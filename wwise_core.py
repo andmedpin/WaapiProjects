@@ -21,8 +21,62 @@ if __name__ == '__main__':
     loop_sound = temp_object.generate_temp_structure("Loop", obj_data_path)
     oneShot_sound = temp_object.generate_temp_structure("OneShot", obj_data_path)
 
+    # Event Hierarchy
+    args = {
+        "parent": "\\Events",
+        "type": "WorkUnit",
+        "name": f"{utility_name}",
+        "onNameConflict": "merge",
+        "children": [
+            {
+                "type": "Event",
+                "name": f"{utility_name}_Loop_Play",
+                "children": [
+                    {
+                        "name": "",
+                        "type": "Action",
+                        "@ActionType": 1,
+                        "@Target": f"{loop_sound}"
+                    }
+                ]
+            },
+            {
+                "type": "Event",
+                "name": f"{utility_name}_OneShot_Play",
+                "children": [
+                    {
+                        "name": "",
+                        "type": "Action",
+                        "@ActionType": 1,
+                        "@Target": f"{oneShot_sound}"
+                    }
+                ]
+            },
+            {
+                "type": "Event",
+                "name": f"{utility_name}_Stop",
+                "children": [
+                    {
+                        "name": f"Stop_{oneShot_sound}",
+                        "type": "Action",
+                        "@ActionType": 2,
+                        "@Target": f"{oneShot_sound}"
+                    },
+                    {
+                        "name": f"Stop_{loop_sound}",
+                        "type": "Action",
+                        "@ActionType": 2,
+                        "@Target": f"{loop_sound}"
+                    }
+                ]
+            }
+        ]
+    }
+
+    WaapiClient().call("ak.wwise.core.object.create", args)
+    WaapiClient().disconnect()
+
     WaapiClient().call("ak.wwise.core.project.save")
     WaapiClient().disconnect()
 
-
-
+    # stretch goal, give the option to add attenuation
